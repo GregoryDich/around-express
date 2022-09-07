@@ -2,8 +2,7 @@ const router = require('express').Router();
 const userRouter = require('./users');
 const cardsRouter = require('./cards');
 
-router.get('/users', userRouter);
-router.get('/cards', cardsRouter);
-router.get('/users/:id', userRouter);
+router.use(userRouter);
+router.use(cardsRouter);
 
 module.exports = router;
