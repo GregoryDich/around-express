@@ -1,7 +1,12 @@
 const Card = require('../models/card');
 
 module.exports.deleteCard = (req, res) => {
-  Card.findOneAndDelete(req.params.id)
+  Card.findOneAndDelete(req.params.cardId)
+    .orFail(() => {
+      const error = new Error('No card found with that id');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -40,6 +45,11 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
+    .orFail(() => {
+      const error = new Error('No card found with that id');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -56,6 +66,11 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
+    .orFail(() => {
+      const error = new Error('No card found with that id');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {

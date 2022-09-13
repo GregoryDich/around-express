@@ -16,7 +16,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(router);
-app.get('*', (req, res) => {
+app.all('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
 });
 
